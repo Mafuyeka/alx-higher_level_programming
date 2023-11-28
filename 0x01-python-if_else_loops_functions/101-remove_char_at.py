@@ -2,12 +2,16 @@
 
 def remove_char_at(str, n):
 
-if n < 0:
+    new = ""
 
-return str
+    i = 0
 
-else:
+    for c in str:
 
-str = str[0:n] + str[n+1:]
+        if i != n:
 
-return str
+            new += c
+
+        i += 1
+    
+    return new

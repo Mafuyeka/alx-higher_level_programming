@@ -1,3 +1,3 @@
--- Prints the full description of the table first_table in my MySQL server.
-SHOW CREATE TABLE `first_table`;
+-- Creates a table called first_table with values id and name in my MySQL server.
+CREATE TABLE IF NOT EXISTS `first_table` (`id` INT, `name` VARCHAR(256));
 

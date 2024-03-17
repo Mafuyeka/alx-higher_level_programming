@@ -1,27 +1,30 @@
 #!/usr/bin/python3
-"""
-Creates the State "California" with the City "San Francisco" from a DB
-"""
-import sys
-from relationship_state import Base, State
-from relationship_city import City
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+"""script to create city and state object"""
 
+if __name__ == "__main__":
+    from sqlalchemy.engine import create_engine
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy.orm import Session
+    from relationship_city import City
+    from relationship_state import Base, State
+    from sys import argv
 
-if __name__ == '__main__':
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.
-                           format(sys.argv[1], sys.argv[2], sys.argv[3]),
-                           pool_pre_ping=True)
+    db = {'drivername': 'mysql+mysqldb',
+          'host': 'localhost',
+          'port': '3306',
+          'username': argv[1],
+          'password': argv[2],
+          'database': argv[3]}
+
+    url = URL(**db)
+    engine = create_engine(url, pool_pre_ping=True)
     Base.metadata.create_all(engine)
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session = Session(engine)
+    city = City(name='San Francisco')
+    state = State(name='California', cities=[city])
 
-    newState = State(name='California')
-    newCity = City(name='San Francisco')
-    newState.cities.append(newCity)
-
-    session.add(newState)
-    session.add(newCity)
+    session.add(state)
+    session.add(city)
     session.commit()
+    session.close()
